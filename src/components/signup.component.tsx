@@ -77,9 +77,12 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
                       data-testid="email-input"
                       {...register("email", { 
                           required: "Email is required!",
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address!",
+                          validate: (value) => {
+                            // regex /^[A-Z0-9._%+-]+@[A-Z0-9.-]$/i,
+                            if (!value.includes("@")) {
+                              return "Email should contain @!";
+                            }
+                            return true;
                           },
                          })}
                     />
