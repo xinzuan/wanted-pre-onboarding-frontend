@@ -27,6 +27,11 @@ const reducer = (state: ICounterState, action: ICounterAction) : ICounterState =
                 todo.id === action.payload ? { ...todo, isCompleted: !todo.isCompleted } : todo
               )
             };
+
+    case 'UPDATE':
+      return {...state,
+        todos: state.todos.map((item) => (item.id === action.payload.id ? { ...action.payload } : item))
+      };
       default:
         return state;
     }

@@ -97,10 +97,12 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
                       data-testid="password-input"
                       {...register("password", {
                         required: "Password is required!",
-                        minLength: {
-                            value: 8,
-                            message: "Password should be at least 8 characters long!",
-                          },
+                        validate: (value) => {
+                          if (value.length < 8) {
+                            return false;
+                          }
+                          return true;
+                        },
                       })}
                     />
                     {errors.password && (

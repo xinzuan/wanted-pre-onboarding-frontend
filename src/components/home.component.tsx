@@ -20,13 +20,21 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
 
   const {
     register,
-    handleSubmit,
+    handleSubmit:handleFormSubmit,
     formState: { errors },
     reset,
   } = useForm();
 
   const [editableTodo, setEditableTodo] = useState<EditableTodo | null>(null);
 
+  const handleCreateSubmit = (data:any) => {
+    create(data);
+  };
+  
+  const handleUpdateSubmit = (data:any, item:any) => {
+  
+    updateTodo(data, item);
+  };
   useEffect(() => {
     getTodos();
   }, []);
@@ -35,11 +43,13 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
     state: { todos },
   } = useContext(TodoContext);
 
+
+
   const getTodos = () => {
     TodoService.getTodos()
       .then((res) => {
         dispatch({ type: "GET" });
-        // Assuming the response data is an array of todos
+     
         res.data.forEach((todo: any) => {
           dispatch({ type: "ADD", payload: todo });
         });
@@ -50,6 +60,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
   };
 
   const create = (data: any) => {
+    if (data.todo){
     TodoService.createTodo(data.todo)
       .then((res) => {
         dispatch({
@@ -65,6 +76,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
       .catch((err) => {
         throw new Error(err);
       });
+    }
   };
 
   const deleteItem = (id: number) => {
@@ -94,20 +106,26 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
     });
   };
 
-  const updateTodo = (data: any) => {
-    TodoService.updateTodo(data.id, data.todo,data.isCompleted)
+  const updateTodo = (data:any,item:any) => {
+    console.log(data);
+    TodoService.updateTodo(item.id, data.editTodo,data.status)
       .then((res) => {
           console.log(res);
         dispatch({
           type: "UPDATE",
           payload: {
-            id: data.id,
-            todo: res.data.todo,
-            isCompleted: res.data.isCompleted,
-            userId: data.userId,
+            id: item.id,
+            todo: data.editTodo,
+            isCompleted: data.status,
+            userId: item.userId,
           },
         });
-        setEditableTodo(null);
+        setEditableTodo({
+          id: data.id,
+          todo: data.editTodo,
+          isCompleted: data.status,
+          isEditing: false,
+        });
       })
       .catch((err) => {
         throw new Error(err);
@@ -132,7 +150,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
           </div>
         </div>
 
-        <form autoComplete="off" onSubmit={handleSubmit(create)} id="add" >
+        <form autoComplete="off" onSubmit={handleFormSubmit(handleCreateSubmit)} id="add" >
           <div className="form-group mt-4">
             <input
               type="text"
@@ -140,7 +158,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
               className="form-control"
               placeholder="Enter todo name"
           
-              {...register("todo", { required: "Todo name is required!" })}
+              {...register("todo")}
             />
             {errors.todo && (
               <p className="text-danger mt-2" style={{ fontSize: 14 }}>
@@ -161,7 +179,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
             {todos.map((item) => (
               <li key={item.id} className="list-group-item">
                 {editableTodo && editableTodo.id === item.id && editableTodo.isEditing ? (
-                  <form onSubmit={handleSubmit(updateTodo)} id="edit" >
+                  <form onSubmit={handleFormSubmit((data) => handleUpdateSubmit(data, item))} id="add">
                   <div className="form-group">
                     <div className="row align-items-center">
                       <div className="col-auto">
@@ -169,7 +187,9 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
                           type="checkbox"
                           className="form-check-input"
                           checked={item.isCompleted}
+                          {...register("status")}
                           onChange={() => toggleTodoStatus(item)}
+                          
                         />
                       </div>
                       <div className="col">
@@ -191,7 +211,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
                   </div>
                 
                   <div className="btn-group" role="group" aria-label="Actions">
-                    <button type="submit" data-testid="submit-button" className="btn btn-success">
+                    <button type="submit" data-testid="submit-button" className="btn btn-success" >
                       제출 (Save)
                     </button>
                     <button type="button" data-testid="cancel-button" className="btn btn-secondary" onClick={cancelEditing}>
