@@ -36,6 +36,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
   };
   useEffect(() => {
     getTodos();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {
