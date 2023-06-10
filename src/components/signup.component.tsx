@@ -1,19 +1,17 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+
 import { ToastContainer, toast, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import AuthService from "../services/auth.service";
-import { response } from "express";
+
 
 type SomeComponentProps = RouteComponentProps;
 const SignUp: FC<SomeComponentProps> = ({ history }) => {
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
     formState: { errors, isValid },
   } = useForm();
 

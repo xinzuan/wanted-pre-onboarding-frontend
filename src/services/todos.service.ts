@@ -5,7 +5,7 @@ const API_URL = 'https://www.pre-onboarding-selection-task.shop/';
 
 class TodoService {
   createTodo(todo: string) {
-    console.log(todo);
+    
     const headers ={
         ...authHeader(),
         "Access-Control-Allow-Origin": "*",
@@ -36,7 +36,7 @@ class TodoService {
         "todo": todo,
         "isCompleted": isCompleted
     }
-    return axios.put(API_URL + `todos/${id}`, body, { headers: authHeader() });
+    return axios.put(API_URL + `todos/${id}`, body, {headers});
   }
 
   deleteTodo(id:number) {

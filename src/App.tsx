@@ -1,6 +1,6 @@
 
 import './App.css';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Login from "./components/login.component";
 import SignUp from './components/signup.component';
 import Home from './components/home.component';
@@ -11,7 +11,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
     <Switch>
       <Route exact path="/signin" component={Login}/>
       <Route exact path="/signup" component={SignUp}/>
@@ -20,7 +20,7 @@ function App() {
       </TodoProvider>
  
       </Switch>
-  </HashRouter>
+  </BrowserRouter>
   );
 }
 

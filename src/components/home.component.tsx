@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "./home.css";
@@ -22,7 +22,6 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
     register,
     handleSubmit:handleFormSubmit,
     formState: { errors },
-    reset,
   } = useForm();
 
   const [editableTodo, setEditableTodo] = useState<EditableTodo | null>(null);
@@ -81,7 +80,7 @@ const Home: FC<SomeComponentProps> = ({ history }) => {
 
   const deleteItem = (id: number) => {
     TodoService.deleteTodo(id)
-      .then((res) => {
+      .then(() => {
    
         dispatch({
           type: "DELETE",
