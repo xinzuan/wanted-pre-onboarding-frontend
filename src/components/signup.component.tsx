@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { Flip, ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import AuthService from "../services/auth.service";
 
@@ -41,7 +41,7 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
             window.location.reload();
           },
         error => {
-            toast.error(error.response.data, {
+            toast.error("Sign up failed", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: true,
@@ -145,6 +145,18 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover
+        limit={1}
+        transition={Flip}
+      />
     </>
   );
 };
