@@ -12,12 +12,15 @@ class AuthService {
       })
       
       .then(response => {
-        console.log(response);
+        console.log(response.data.status);
         if (response.data.access_token) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          return response.data;
+        } else{
+          return Promise.reject(new Error("Access token not found"));
         }
 
-        return response.data;
+        
       });
   }
 

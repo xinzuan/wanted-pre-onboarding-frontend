@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -9,14 +9,21 @@ import AuthService from "../services/auth.service";
 
 type SomeComponentProps = RouteComponentProps;
 const SignUp: FC<SomeComponentProps> = ({ history }) => {
+  const [isFormValid, setIsFormValid] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm();
 
-
+  const handleInputChange = () => {
+    console.log(errors);
+    setIsFormValid(Object.keys(errors).length === 0);
+  };
   const submitData = (data: any) => {
+    if (!isFormValid) {
+      return;
+    }
     let params = {
       email: data.email,
       password: data.password,
@@ -64,13 +71,14 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
                 <form
                   className="row"
                   autoComplete="off"
+                  onChange={handleInputChange}
                   onSubmit={handleSubmit(submitData)}
                 >
 
                   <div className="">
                     <label className="form-label">Email</label>
                     <input
-                      type="email"
+                      
                       className="form-control form-control-sm"
                       data-testid="email-input"
                       {...register("email", { 
@@ -78,13 +86,15 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
                           validate: (value) => {
                             // regex /^[A-Z0-9._%+-]+@[A-Z0-9.-]$/i,
                             if (!value.includes("@")) {
-                              return "Email should contain @!";
+                              return false;
                             }
                             return true;
                           },
                          })}
                     />
+                    
                     {errors.email && (
+                      
                       <p className="text-danger" style={{ fontSize: 14 }}>
                         Email should contain @ !
                       </p>
@@ -118,7 +128,7 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
                       className="btn btn-outline-primary text-center shadow-none mb-3"
                       type="submit"
                       data-testid="signup-button"
-                      disabled={!isValid}
+                      disabled={!isFormValid}
                     >
                       회원가입
                     </button>
@@ -135,18 +145,6 @@ const SignUp: FC<SomeComponentProps> = ({ history }) => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover
-        limit={1}
-        transition={Flip}
-      />
     </>
   );
 };

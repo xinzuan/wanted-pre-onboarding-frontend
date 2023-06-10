@@ -23,8 +23,10 @@ const Login: FC<SomeComponentProps> = ({ history }): JSX.Element => {
           history.push("/todo");
           window.location.reload();
         },
+        
         error => {
-            toast.error(error.response.data, {
+            
+            toast.error("Email/password is wrong", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: true,
